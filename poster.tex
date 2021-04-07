@@ -1,0 +1,161 @@
+\documentclass[25pt,a0paper,landscape]{tikzposter}
+\tikzposterlatexaffectionproofoff
+\usetheme{Envelope}
+\usecolorstyle{Britian}
+
+% HUGE font size for the title.
+\makeatletter
+\newcommand\HUGE{\@setfontsize\Huge{80}{90}}
+\makeatother
+
+% Override the bizarre capitalisation in the title and increase font size.
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\TP@maketitle}
+  {\bfseries \Huge \sc}
+  {\bfseries\HUGE}
+  {}{}
+\makeatother
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{minted}
+\usepackage{relsize}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphics}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit}
+\newcommand\NameBlock[1]{\node[fit=(blockbody)(blocktitle),inner sep=5pt] (#1) {};}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+}
+
+\title{
+The Demes standard for demographic models
+}
+\author{
+Graham Gower$^1$, Aaron P Ragsdale$^2$, Jerome Kelleher$^3$, Kevin Thornton$^4$
+}
+\institute{
+\begin{center}
+\begin{minipage}{.65\textwidth}
+${}^1$Globe Institute, University of Copenhagen, Denmark\hfill
+${}^3$Big Data Institute, University of Oxford, United Kingdom\\
+${}^2$National Laboratory of Genomics for Biodiversity, Irapuato, Mexico\hfill
+${}^4$University of California, Irvine, USA
+\end{minipage}
+\end{center}
+}
+
+\begin{document}
+\maketitle
+
+\tikzset{
+    arc/.style={
+        % use a colour defined by the \colorstyle
+        draw=colorOne,
+        >=latex,
+        line width=5mm,
+        rounded corners=1cm,
+    },
+}
+
+
+\begin{columns}
+
+\column{0.013} % add some horizontal space (margins, eh? who needs 'em!)
+\column{0.30}
+
+\block{About}{
+\relsize{2}
+\begin{itemize}
+\item
+Demographic models can be complex and specifying them for
+inference or simulation is tedious and error prone.
+Moreover, there is no standard way to write such a model.
+\item
+Demes is a formal language-agnostic data model for demographic models.
+Users write their models as a human-readable YAML file.
+\url{https://github.com/popsim-consortium/demes-spec}
+\item
+We wrote a Python library that implements the Demes specification,
+and interoperates with popular population genetics packages.
+\url{https://github.com/popsim-consortium/demes-python}
+\item
+We encourage the authors of other software packages to contact
+us so we can help to implement Demes support more widely.
+\end{itemize}
+}
+
+\block[
+  bodyoffsety=-1.9cm,
+  titleoffsety=-1.9cm
+]{Visualise}{
+\includegraphics[width=.85\colwidth]{example.pdf}
+}
+\NameBlock{viz}
+
+\column{0.075} % add some horizontal space
+\column{0.25}
+
+
+\block{example.yaml}{
+\relsize{2}
+    \inputminted{yaml}{example.yaml}
+}
+\NameBlock{yaml}
+
+\draw [->,arc] (yaml.west) -- +(-5cm, 0cm) |- (viz.east);
+
+\block[
+]{Acknowledgements}{
+\relsize{2}
+Thanks to the Racimo Group and the PopSim Consortium for discussions and encouragement.
+GG was supported by a Villum Fonden grant to Fernando Racimo.
+}
+
+\column{0.05} % add some horizontal space
+\column{0.30}
+
+\block[
+  bodyoffsety=-9cm,
+  titleoffsety=-9cm
+]{Infer}{
+\relsize{2}
+\begin{itemize}
+    \item moments\\\url{https://moments.readthedocs.io/}
+    \item \texttt{[your software here]}
+\end{itemize}
+}
+\NameBlock{infer}
+
+\draw [->,arc] (yaml.north east) +(0cm,-3cm) -| (infer.north);
+\draw [->,arc] (infer.south) |- (yaml.east);
+
+\block[
+  bodyoffsety=-19.4cm,
+  titleoffsety=-19.4cm
+]{Simulate}{
+\relsize{2}
+\begin{itemize}
+    \item moments\\ \url{https://moments.readthedocs.io/}
+    \item fwdpy11\\ \url{https://molpopgen.github.io/fwdpy11/}
+    \item msprime\\ \url{https://tskit.dev/msprime/docs/}
+    \item stdpopsim\\ \url{https://stdpopsim.readthedocs.io/}
+    \item \texttt{[your software here]}
+\end{itemize}
+}
+\NameBlock{sim}
+
+\draw [->,arc] (yaml.east) +(0cm,-3cm) -| (sim.north);
+
+\end{columns}
+
+\end{document}
